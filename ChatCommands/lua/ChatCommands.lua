@@ -3,6 +3,17 @@ if not ChatCommands then
 	ChatCommands.modname = "ChatCommands"
 	ChatCommands.prefix = "[" .. ChatCommands.modname .. "]"
 	
+	ChatCommands._value_types = {}
+	ChatCommands._value_types[1] = { name = "boolean", check = function(arg) return arg == "true" or arg == "false" end }
+	ChatCommands._value_types[2] = { name = "number", check = function(arg) return tonumber(arg) and true end }
+	ChatCommands._value_types[3] = { name = "string", check = function(arg) return arg ~= "" end }
+	ChatCommands._value_types[4] = { name = "peer_id", check = function(arg) return (tonumber(arg) and tonumber(arg) >= 0 and tonumber(arg) <= 4) end }
+	
+	ChatCommands._command_types = {}
+	ChatCommands._command_types.clientonly = "clientonly"
+	ChatCommands._command_types.hostonly = "hostonly"
+	ChatCommands._command_types.lobbywide = "lobbywide"
+	
 	ChatCommands._commands = {}
 	
 	function ChatCommands:_send_message_to_peer(peer, message)
@@ -10,18 +21,18 @@ if not ChatCommands then
 			peer:send("send_chat_message", ChatManager.GAME, self.prefix .. ": " .. message)
 		end
 	end
-	function validateArguments(chat_args, cmd_args)
+	function ChatCommands:_validateArguments(chat_args, cmd_args)
 		local check_all_required = 1
 		for it = 1, #chat_args do
 			if cmd_args[it] then
-				if cmd_args[it]._value_type == "boolean" and chat_args[it] ~= "true" and chat_args[it] ~= "false" then
-					return false
-				elseif cmd_args[it]._value_type == "number" and not tonumber(chat_args[it]) then
-					return false
-				elseif cmd_args[it]._value_type == "string" and chat_args[it] == "" then
-					return false
-				elseif cmd_args[it]._value_type == "peer_id" and (not tonumber(chat_args[it]) or tonumber(chat_args[it]) < 0 or tonumber(chat_args[it]) > 3) then
-					return false
+				for __, value_type in pairs(ChatCommands._value_types) do
+					if cmd_args._value_type == value_type.name then
+						if not value_type.check(chat_args[it]) then
+							return false
+						else
+							break
+						end
+					end
 				end
 			else
 				return false
@@ -45,9 +56,12 @@ if not ChatCommands then
 		end
 		if command and self._commands[command:key()] then
 			local cmd = self._commands[command:key()]
+			if cmd._command_type == ChatCommands._command_types.hostonly and not _G.LuaNetworking:IsHost() and _G.LuaNetworking:IsMultiplayer() then
+				return false
+			end
 			text:set_text("")
 			text:set_selection(0, 0)
-			if validateArguments(command_args, cmd._arguments) then
+			if ChatCommands:_validateArguments(command_args, cmd._arguments) then
 				return cmd._callback(command_args) or false
 			else
 				local args_string = ""
@@ -90,10 +104,11 @@ if not ChatCommands then
 		end
 	end
 	
-	function ChatCommands:addCommand(command, modname, cmd_description, arguments, callback)
+	function ChatCommands:addCommand(command, modname, cmd_description, arguments, callback, command_type)
 		arguments = arguments or {}
 		modname = modname or ""
-		self._commands[Idstring(command):key()] = {_commandname = command, _callback = callback, _modname = modname, _description = cmd_description,  _arguments = arguments}
+		command_type = command_type or ChatCommands._command_types.clientonly
+		self._commands[Idstring(command):key()] = {_commandname = command, _command_type = command_type, _callback = callback, _modname = modname, _description = cmd_description,  _arguments = arguments}
 	end
 	function ChatCommands:newArgument(argname, value_type, required)
 		return {_argname = argname, _value_type = value_type, _required = required and true}
