@@ -175,7 +175,7 @@ if RequiredScript == "lib/managers/chatmanager" then
 		end
 	end
 	function ChatManager:receive_message_by_peer(channel_id, peer, message)
-		if peer:id() ~= _G.LuaNetworking:LocalPeerID() then
+		if peer:id() ~= _G.LuaNetworking:LocalPeerID() and _G.LuaNetworking:IsHost() then
 			local response = ChatCommands:_parseMessage(message, ChatCommands._command_types.lobbywide)
 			if response ~= false then
 				if response ~= "" then
