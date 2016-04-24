@@ -3,11 +3,11 @@
 	"description" : "Implents a command line API for the ingame chat.",
 	"author" : "SerMi",
 	"contact" : "sermi@gpplanet.de",
-	"version" : "0.2",
+	"version" : "0.4",
 	"updates" : 
 	[
 		{
-			"revision" : 1,
+			"revision" : 2,
 			"identifier" : "ChatCommands"
 		}
 	],
