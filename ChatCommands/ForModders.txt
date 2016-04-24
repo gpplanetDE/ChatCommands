@@ -1,0 +1,23 @@
+To use your own commands, just use the following function in your code:
+
+ChatCommands:addCommand(commandname, modname, cmd_description, arguments, callback_function)
+
+-> The "callback_function" parameter (function) is used to hold your callback-function. The API passes the entered arguments in an string-array (table). If your callback-function returns anything, this will be printed in the chat.
+-> The "arguments" parameter (table) is a table holding arguments made with:
+
+ChatCommands:newArgument(argname, value_type, required)
+
+-> The "value_type" parameter (string) determines what values are allowed: choose between "boolean", "number", "string" and "peer_id"
+-> The "required" parameter (boolean) determines if this argument is required in order to use this command or not.
+
+
+
+
+
+Example:
+
+ChatCommands:addCommand("thisisacmd", "mymod", "Just does something", {ChatCommands:newArgument("justanargument", "string", true), ChatCommands:newArgument("justanotherargument", "boolean", false)}, function(args)
+	... -- your callback-function
+end)
+
+For more examples see "lua/CommandUtilities.lua"
