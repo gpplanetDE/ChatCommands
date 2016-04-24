@@ -35,6 +35,18 @@ if not CommandUtilities then
 		end
 	end)
 	
+	ChatCommands:addCommand("commands", CommandUtilities.modname, "Returns all available commands.", nil, function(args)
+		local cmds = ChatCommands:getCommands()
+		local result = ""
+		for __, cmd in pairs(cmds) do
+			if result ~= "" then
+				result = result .. "; "
+			end
+			result = result .. cmd._commandname
+		end
+		return result
+	end)
+	
 	ChatCommands:addCommand("mods", CommandUtilities.modname, "Returns the commanded mods.", nil, function(args)
 		local mods = ChatCommands:getCommandedMods()
 		local result = ""
@@ -47,7 +59,7 @@ if not CommandUtilities then
 		return result
 	end)
 	
-	ChatCommands:addCommand("modcommands", CommandUtilities.modname, "Returns the commanded mods.", {ChatCommands:newArgument("mod", "string", true)}, function(args)
+	ChatCommands:addCommand("modcommands", CommandUtilities.modname, "Returns the available commands for the given mod.", {ChatCommands:newArgument("mod", "string", true)}, function(args)
 		if args and args[1] and #ChatCommands:modGetCommands(args[1]) > 0 then
 			local cmds = ChatCommands:modGetCommands(args[1])
 			local result = ""

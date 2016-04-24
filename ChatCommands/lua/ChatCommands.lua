@@ -134,6 +134,9 @@ if not ChatCommands then
 	function ChatCommands:getCommand(command)
 		return self._commands[Idstring(command):key()]
 	end
+	function ChatCommands:getCommands(command)
+		return self._commands
+	end
 	function ChatCommands:modGetCommands(modname)
 		local commands = {}
 		for __, cmd in pairs(self._commands) do
