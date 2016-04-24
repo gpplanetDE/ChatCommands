@@ -45,7 +45,23 @@ if not ChatCommands then
 		return true
 	end
 	function ChatCommands:_parseChat(text)
-		local message = text:text()
+		local cmd_type = ""
+		if _G.LuaNetworking:IsHost() or not _G.LuaNetworking:IsMultiplayer() then
+			cmd_type = ChatCommands._command_types.hostonly
+		else
+			cmd_type = ChatCommands._command_types.clientonly
+		end
+		local result = ChatCommands:_parseMessage(text:text(), cmd_type)
+		if result and result ~= false then
+			text:set_text("")
+			text:set_selection(0, 0)
+			return result
+		else
+			return false
+		end
+	end
+	
+	function ChatCommands:_parseMessage(message, allowed_command_type)
 		local command, command_args
 		if utf8.sub(message, 1, 1) == "/" then
 			local command_string = utf8.sub(message, 2, utf8.len(message))
@@ -56,13 +72,14 @@ if not ChatCommands then
 		end
 		if command and self._commands[command:key()] then
 			local cmd = self._commands[command:key()]
-			if cmd._command_type == ChatCommands._command_types.hostonly and not _G.LuaNetworking:IsHost() and _G.LuaNetworking:IsMultiplayer() then
+			if cmd._command_type == ChatCommands._command_types.hostonly and allowed_command_type ~= ChatCommands._command_types.hostonly then
+				return false
+			elseif cmd._command_type == ChatCommands._command_types.clientonly and allowed_command_type == ChatCommands._command_types.lobbywide then
 				return false
 			end
-			text:set_text("")
-			text:set_selection(0, 0)
 			if ChatCommands:_validateArguments(command_args, cmd._arguments) then
-				return cmd._callback(command_args) or false
+				local ret = cmd._callback(command_args)
+				return ret and tostring(ret) or ""
 			else
 				local args_string = ""
 				for __, arg in pairs(cmd._arguments) do
@@ -140,17 +157,31 @@ if not ChatCommands then
 end
 if RequiredScript == "lib/managers/chatmanager" then
 	local CCcm_enter_key_callback_original = ChatGui.enter_key_callback
+	local CCcm_receive_message_by_peer_original = ChatManager.receive_message_by_peer
 	function ChatGui:enter_key_callback()
 		if not self._enabled then
 			return
 		end
 		local response = ChatCommands:_parseChat(self._input_panel:child("input_text"))
 		if response ~= false then
-			ChatCommands:_respond(response)
-			return
+			if response ~= "" then
+				ChatCommands:_respond(response)
+			end
 		else
 			CCcm_enter_key_callback_original(self)
 		end
+	end
+	function ChatManager:receive_message_by_peer(channel_id, peer, message)
+		if peer:id() ~= _G.LuaNetworking:LocalPeerID() then
+			local response = ChatCommands:_parseMessage(message, ChatCommands._command_types.lobbywide)
+			if response ~= false then
+				if response ~= "" then
+					ChatCommands:_send_message_to_peer(peer, ">> " .. response)
+				end
+				self:_receive_message(channel_id, peer:name(), message, Color(1, 255, 0, 0), (peer:level() == nil and managers.experience:current_rank() > 0 or 0 < peer:rank()) and "infamy_icon")
+			end
+		end
+		CCcm_receive_message_by_peer_original(self, channel_id, peer, message)
 	end
 elseif RequiredScript == "lib/managers/hud/hudchat" then
 	local CChc_enter_key_callback_original = HUDChat.enter_key_callback
@@ -158,8 +189,9 @@ elseif RequiredScript == "lib/managers/hud/hudchat" then
 		local response = ChatCommands:_parseChat(self._input_panel:child("input_text"))
 		if response ~= false then
 			managers.hud:set_chat_focus(false)
-			ChatCommands:_respond(response)
-			return
+			if response ~= "" then
+				ChatCommands:_respond(response)
+			end
 		else
 			CChc_enter_key_callback_original(self)
 		end
