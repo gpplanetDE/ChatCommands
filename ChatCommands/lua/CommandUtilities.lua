@@ -7,10 +7,13 @@ if not CommandUtilities then
 		return "peer_id: " .. tostring(user:id())
 	end, ChatCommands._command_types.lobbywide)
 	
-	ChatCommands:addCommand("whois", CommandUtilities.modname, "Returns the steam username belonging to the given peer_id.", {ChatCommands:newArgument("peer_id", "peer_id", true)}, function(args)
+	ChatCommands:addCommand("whois", CommandUtilities.modname, "Returns the steam username belonging to the given peer_id.", {ChatCommands:newArgument("peer_id", "peer_id", true)}, function(args, user)
 		if args and args[1] and tonumber(args[1]) then
-			if tonumber(args[1]) == _G.LuaNetworking:LocalPeerID() then
+			if tonumber(args[1]) == user:id() then
 				return "The given peer_id is yours."
+			end
+			if tonumber(args[1]) == _G.LuaNetworking:LocalPeerID() and managers.network and managers.network:session() and managers.network:session():local_peer() then
+				return "steamname: " .. tostring(managers.network:session():local_peer():name()))
 			end
 			return "steamname: " .. tostring(_G.LuaNetworking:GetNameFromPeerID(tonumber(args[1])))
 		end
