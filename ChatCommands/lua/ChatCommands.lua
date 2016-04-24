@@ -179,6 +179,7 @@ if RequiredScript == "lib/managers/chatmanager" then
 					ChatCommands:_send_message_to_peer(peer, ">> " .. response)
 				end
 				self:_receive_message(channel_id, peer:name(), message, Color(1, 255, 0, 0), (peer:level() == nil and managers.experience:current_rank() > 0 or 0 < peer:rank()) and "infamy_icon")
+				return
 			end
 		end
 		CCcm_receive_message_by_peer_original(self, channel_id, peer, message)
