@@ -26,7 +26,7 @@ if not ChatCommands then
 		for it = 1, #chat_args do
 			if cmd_args[it] then
 				for __, value_type in pairs(ChatCommands._value_types) do
-					if cmd_args._value_type == value_type.name then
+					if cmd_args[it]._value_type == value_type.name then
 						if not value_type.check(chat_args[it]) then
 							return false
 						else
