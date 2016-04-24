@@ -21,6 +21,13 @@ if not ChatCommands then
 			peer:send("send_chat_message", ChatManager.GAME, self.prefix .. ": " .. message)
 		end
 	end
+	function ChatCommands:_isLocalPeer(peer)
+		return not peer and true or peer:id() == _G.LuaNetworking:LocalPeerID()
+	end
+	function ChatCommands:_isHost(peer)
+		return not peer and true or peer:is_host()
+	end
+	
 	function ChatCommands:_validateArguments(chat_args, cmd_args)
 		local check_all_required = 1
 		for it = 1, #chat_args do
@@ -51,7 +58,7 @@ if not ChatCommands then
 		else
 			cmd_type = ChatCommands._command_types.clientonly
 		end
-		local result = ChatCommands:_parseMessage(text:text(), cmd_type)
+		local result = ChatCommands:_parseMessage(text:text(), cmd_type, managers.network:session():local_peer())
 		if result and result ~= false then
 			text:set_text("")
 			text:set_selection(0, 0)
@@ -61,7 +68,7 @@ if not ChatCommands then
 		end
 	end
 	
-	function ChatCommands:_parseMessage(message, allowed_command_type)
+	function ChatCommands:_parseMessage(message, allowed_command_type, peer)
 		local command, command_args
 		if utf8.sub(message, 1, 1) == "/" then
 			local command_string = utf8.sub(message, 2, utf8.len(message))
@@ -78,7 +85,7 @@ if not ChatCommands then
 				return false
 			end
 			if ChatCommands:_validateArguments(command_args, cmd._arguments) then
-				local ret = cmd._callback(command_args)
+				local ret = cmd._callback(command_args, peer)
 				return ret and tostring(ret) or ""
 			else
 				local args_string = ""
@@ -134,14 +141,23 @@ if not ChatCommands then
 	function ChatCommands:getCommand(command)
 		return self._commands[Idstring(command):key()]
 	end
-	function ChatCommands:getCommands(command)
-		return self._commands
+	function ChatCommands:getCommands(peer)
+		local commands = {}
+		for __, cmd in pairs(self._commands) do
+			if (ChatCommands:_isLocalPeer(peer) and ChatCommands:_isHost(peer)) or (ChatCommands:_isLocalPeer(peer) and cmd._command_type ~= ChatCommands._command_types.hostonly) or (cmd._command_type == ChatCommands._command_types.lobbywide) then
+				table.insert(commands, cmd)
+			end
+		end
+		return commands
+		
 	end
-	function ChatCommands:modGetCommands(modname)
+	function ChatCommands:modGetCommands(modname, peer)
 		local commands = {}
 		for __, cmd in pairs(self._commands) do
 			if cmd._modname == modname then
-				table.insert(commands, cmd)
+				if (ChatCommands:_isLocalPeer(peer) and ChatCommands:_isHost(peer)) or (ChatCommands:_isLocalPeer(peer) and cmd._command_type ~= ChatCommands._command_types.hostonly) or (cmd._command_type == ChatCommands._command_types.lobbywide) then
+					table.insert(commands, cmd)
+				end
 			end
 		end
 		return commands
@@ -176,7 +192,7 @@ if RequiredScript == "lib/managers/chatmanager" then
 	end
 	function ChatManager:receive_message_by_peer(channel_id, peer, message)
 		if peer:id() ~= _G.LuaNetworking:LocalPeerID() and _G.LuaNetworking:IsHost() then
-			local response = ChatCommands:_parseMessage(message, ChatCommands._command_types.lobbywide)
+			local response = ChatCommands:_parseMessage(message, ChatCommands._command_types.lobbywide, peer)
 			if response ~= false then
 				if response ~= "" then
 					ChatCommands:_send_message_to_peer(peer, ">> " .. response)
