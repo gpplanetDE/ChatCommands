@@ -4,6 +4,7 @@
 	"author" : "SerMi",
 	"contact" : "sermi@gpplanet.de",
 	"version" : "0.6",
+	"priority" : 50,
 	"updates" : 
 	[
 		{
