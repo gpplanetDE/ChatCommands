@@ -13,7 +13,7 @@ if not CommandUtilities then
 				return "The given peer_id is yours."
 			end
 			if tonumber(args[1]) == _G.LuaNetworking:LocalPeerID() and managers.network and managers.network:session() and managers.network:session():local_peer() then
-				return "steamname: " .. tostring(managers.network:session():local_peer():name()))
+				return "steamname: " .. tostring(managers.network:session():local_peer():name())
 			end
 			return "steamname: " .. tostring(_G.LuaNetworking:GetNameFromPeerID(tonumber(args[1])))
 		end
@@ -37,7 +37,7 @@ if not CommandUtilities then
 			end
 			return "[" .. cmd._modname .. "] " .. cmd._commandname .. ": " .. cmd._description .. args_string
 		else
-			return "Usage: /help [command]. Find available commands with /mods and /modcommands [modname]"
+			return "Usage: /help [command]. Find available commands with /commands, /mods and /modcommands [modname]"
 		end
 	end, ChatCommands._command_types.lobbywide)
 	
