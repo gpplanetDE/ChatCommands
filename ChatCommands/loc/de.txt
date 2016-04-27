@@ -1,4 +1,8 @@
 {
+	"ChatCommands_usage" : "Verwendung: ",
+	
+	"ChatCommands_respond_prefix" : ">> ",
+	
 	"CommandUtilities_no_translation" : "Keine Übersetzung in der Sprachdatei.",
 	"CommandUtilities_missing" : "Ein Parameter/Var war nicht gegeben.",
 
