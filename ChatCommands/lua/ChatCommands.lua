@@ -103,6 +103,8 @@ if not ChatCommands then
 				end
 				return LocalizationManager:text("ChatCommands_usage") .. cmd._commandname .. args_string
 			end
+		elseif command then
+			return LocalizationManager:text("CommandUtilities_cmd_not_exists")
 		end
 		return false
 	end
