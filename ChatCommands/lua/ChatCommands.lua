@@ -171,10 +171,10 @@ if not ChatCommands then
 		end
 		return mods
 	end
-	
-	dofile(ModPath .. "lua/CommandUtilities.lua")
 end
 if RequiredScript == "lib/managers/chatmanager" then
+	dofile(ModPath .. "lua/CommandUtilities.lua")
+
 	local CCcm_enter_key_callback_original = ChatGui.enter_key_callback
 	local CCcm_receive_message_by_peer_original = ChatManager.receive_message_by_peer
 	function ChatGui:enter_key_callback()
@@ -214,6 +214,25 @@ elseif RequiredScript == "lib/managers/hud/hudchat" then
 			end
 		else
 			CChc_enter_key_callback_original(self)
+		end
+	end
+elseif RequiredScript == "lib/managers/menumanager" then
+	function MenuManager:toggle_chatinput()
+		if Application:editor() then
+			return
+		end
+		if SystemInfo:platform() ~= Idstring("WIN32") then
+			return
+		end
+		if self:active_menu() then
+			return
+		end
+		if not managers.network:session() then
+			return
+		end
+		if managers.hud then
+			managers.hud:toggle_chatinput()
+			return true
 		end
 	end
 end
