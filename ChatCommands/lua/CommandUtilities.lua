@@ -13,10 +13,10 @@ if not CommandUtilities then
 			local _path = CommandUtilities._loc_path .. current_language .. ".txt"
 
 			if io.file_is_readable(_path) then
-				LocalizationManager:load_localization_file(CommandUtilities._loc_path .. current_language .. ".txt")
-				LocalizationManager:load_localization_file(CommandUtilities._loc_path .. "en.txt", false)
+				LocalizationManager:load_localization_file(CommandUtilities._loc_path .. "en.txt", true)
+				LocalizationManager:load_localization_file(CommandUtilities._loc_path .. current_language .. ".txt", true)
 			else
-				LocalizationManager:load_localization_file(CommandUtilities._loc_path .. "en.txt")
+				LocalizationManager:load_localization_file(CommandUtilities._loc_path .. "en.txt", true)
 			end
 		end
 	end
