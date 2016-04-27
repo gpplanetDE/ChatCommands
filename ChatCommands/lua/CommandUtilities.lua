@@ -22,11 +22,11 @@ if not CommandUtilities then
 	end
 	CommandUtilities:loadLocalization()
 	
-	ChatCommands:addCommand("whoami", CommandUtilities.modname, "Returns your own peer_id.", nil, function(args, user)
+	ChatCommands:addCommand("whoami", CommandUtilities.modname, LocalizationManager:text("CommandUtilities_cmd_whoami_desc"), nil, function(args, user)
 		return "peer_id: " .. tostring(user:id())
 	end, ChatCommands._command_types.lobbywide)
 	
-	ChatCommands:addCommand("whois", CommandUtilities.modname, "Returns the steam username belonging to the given peer_id.", {ChatCommands:newArgument("peer_id", "peer_id", true)}, function(args, user)
+	ChatCommands:addCommand("whois", CommandUtilities.modname, LocalizationManager:text("CommandUtilities_cmd_whois_desc"), {ChatCommands:newArgument("peer_id", "peer_id", true)}, function(args, user)
 		if args and args[1] and tonumber(args[1]) then
 			if tonumber(args[1]) == user:id() then
 				return "The given peer_id is yours."
@@ -38,7 +38,7 @@ if not CommandUtilities then
 		end
 	end, ChatCommands._command_types.lobbywide)
 	
-	ChatCommands:addCommand("help", CommandUtilities.modname, "Returns information about the given command.", {ChatCommands:newArgument("command", "string", false)}, function(args)
+	ChatCommands:addCommand("help", CommandUtilities.modname, LocalizationManager:text("CommandUtilities_cmd_help_desc"), {ChatCommands:newArgument("command", "string", false)}, function(args)
 		if args and args[1] and ChatCommands:getCommand(args[1]) then
 			local cmd = ChatCommands:getCommand(args[1])
 			local args_string = ""
@@ -56,11 +56,11 @@ if not CommandUtilities then
 			end
 			return "[" .. cmd._modname .. "] " .. cmd._commandname .. ": " .. cmd._description .. args_string
 		else
-			return "Usage: /help [command]. Find available commands with /commands, /mods and /modcommands [modname]"
+			return LocalizationManager:text("CommandUtilities_cmd_help_usage")
 		end
 	end, ChatCommands._command_types.lobbywide)
 	
-	ChatCommands:addCommand("commands", CommandUtilities.modname, "Returns all available commands.", nil, function(args, user)
+	ChatCommands:addCommand("commands", CommandUtilities.modname, LocalizationManager:text("CommandUtilities_cmd_commands_desc"), nil, function(args, user)
 		local cmds = ChatCommands:getCommands(user)
 		local result = ""
 		for __, cmd in pairs(cmds) do
@@ -72,7 +72,7 @@ if not CommandUtilities then
 		return result
 	end, ChatCommands._command_types.lobbywide)
 	
-	ChatCommands:addCommand("mods", CommandUtilities.modname, "Returns the commanded mods.", nil, function(args)
+	ChatCommands:addCommand("mods", CommandUtilities.modname, LocalizationManager:text("CommandUtilities_cmd_mods_desc"), nil, function(args)
 		local mods = ChatCommands:getCommandedMods()
 		local result = ""
 		for __, modname in pairs(mods) do
@@ -84,7 +84,7 @@ if not CommandUtilities then
 		return result
 	end, ChatCommands._command_types.lobbywide)
 	
-	ChatCommands:addCommand("modcommands", CommandUtilities.modname, "Returns the available commands for the given mod.", {ChatCommands:newArgument("mod", "string", true)}, function(args, user)
+	ChatCommands:addCommand("modcommands", CommandUtilities.modname, LocalizationManager:text("CommandUtilities_cmd_modcommands_desc"), {ChatCommands:newArgument("mod", "string", true)}, function(args, user)
 		if args and args[1] then
 			local cmds = ChatCommands:modGetCommands(args[1], user)
 			if #cmds > 0 then
@@ -98,7 +98,7 @@ if not CommandUtilities then
 				return result
 			end
 		else
-			return "There are no commands available for the given mod. Try /mods"
+			return LocalizationManager:text("CommandUtilities_cmd_modcommands_no_cmds")
 		end
 	end, ChatCommands._command_types.lobbywide)
 	
@@ -118,7 +118,7 @@ if not CommandUtilities then
 	
 	ChatCommands:addCommand("charhelp", CommandUtilities.modname, LocalizationManager:text("CommandUtilities_cmd_charhelp_desc"), nil, function(args)
 		local result = ""
-		for __,_char in pairs(CommandUtilities.ReplaceChars:getChars()) do
+		for __,_char in ipairs(CommandUtilities.ReplaceChars:getChars()) do
 			if result ~= "" then
 				result = result .. ", "
 			end

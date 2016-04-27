@@ -66,7 +66,7 @@ if CommandUtilities and not CommandUtilities.ReplaceChars then
 	end
 	
 	function CommandUtilities.ReplaceChars:_replace_special_chars(str)
-		for __,_char in pairs(CommandUtilities.ReplaceChars._chars) do
+		for __,_char in ipairs(CommandUtilities.ReplaceChars._chars) do
 			str = str:gsub(tostring(_char.identifier), tostring(managers.localization:get_default_macro(tostring(_char.charcode))))
 		end
 		return str
