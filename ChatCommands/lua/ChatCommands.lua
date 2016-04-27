@@ -217,22 +217,27 @@ elseif RequiredScript == "lib/managers/hud/hudchat" then
 		end
 	end
 elseif RequiredScript == "lib/managers/menumanager" then
+	local CCmm_toggle_chatinput_original = MenuManager.toggle_chatinput
 	function MenuManager:toggle_chatinput()
-		if Application:editor() then
-			return
-		end
-		if SystemInfo:platform() ~= Idstring("WIN32") then
-			return
-		end
-		if self:active_menu() then
-			return
-		end
-		if not managers.network:session() then
-			return
-		end
-		if managers.hud then
-			managers.hud:toggle_chatinput()
-			return true
+		if Global.game_settings.single_player then
+			if Application:editor() then
+				return
+			end
+			if SystemInfo:platform() ~= Idstring("WIN32") then
+				return
+			end
+			if self:active_menu() then
+				return
+			end
+			if not managers.network:session() then
+				return
+			end
+			if managers.hud then
+				managers.hud:toggle_chatinput()
+				return true
+			end
+		else
+			return CCmm_toggle_chatinput_original(self)
 		end
 	end
 end
