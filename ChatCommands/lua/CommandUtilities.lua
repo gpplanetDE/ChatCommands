@@ -3,6 +3,25 @@ if not CommandUtilities then
 	CommandUtilities.modname = "CommandUtilities"
 	CommandUtilities.prefix = "[" .. CommandUtilities.modname .. "]"
 	
+	CommandUtilities._loc_path = ModPath .. "loc/"
+	
+	
+	function CommandUtilities:loadLocalization()
+		local current_language = LuaModManager._languages[LuaModManager:GetLanguageIndex()]
+
+		if current_language then
+			local _path = CommandUtilities._loc_path .. current_language .. ".txt"
+
+			if io.file_is_readable(_path) then
+				LocalizationManager:load_localization_file(CommandUtilities._loc_path .. current_language .. ".txt")
+				LocalizationManager:load_localization_file(CommandUtilities._loc_path .. "en.txt", false)
+			else
+				LocalizationManager:load_localization_file(CommandUtilities._loc_path .. "en.txt")
+			end
+		end
+	end
+	CommandUtilities:loadLocalization()
+	
 	ChatCommands:addCommand("whoami", CommandUtilities.modname, "Returns your own peer_id.", nil, function(args, user)
 		return "peer_id: " .. tostring(user:id())
 	end, ChatCommands._command_types.lobbywide)
@@ -82,4 +101,34 @@ if not CommandUtilities then
 			return "There are no commands available for the given mod. Try /mods"
 		end
 	end, ChatCommands._command_types.lobbywide)
+	
+	if not CommandUtilities.ReplaceChars then
+		dofile(ModPath .. "lua/ReplaceChars.lua")
+	end
+	
+	ChatCommands:addCommand("char", CommandUtilities.modname, LocalizationManager:text("CommandUtilities_cmd_char_desc"), nil, function(args)
+		if CommandUtilities.ReplaceChars:auto_replacement_enabled() then
+			CommandUtilities.ReplaceChars:set_auto_replacement_enabled(false)
+			return LocalizationManager:text("CommandUtilities_auto_replacement_off")
+		else
+			CommandUtilities.ReplaceChars:set_auto_replacement_enabled(true)
+			return LocalizationManager:text("CommandUtilities_auto_replacement_on")
+		end
+	end, ChatCommands._command_types.clientonly)
+	
+	ChatCommands:addCommand("charhelp", CommandUtilities.modname, LocalizationManager:text("CommandUtilities_cmd_charhelp_desc"), nil, function(args)
+		local result = ""
+		for __,_char in pairs(CommandUtilities.ReplaceChars:getChars()) do
+			if result ~= "" then
+				result = result .. ", "
+			end
+			result = result .. tostring(managers.localization:get_default_macro(tostring(_char.charcode))) .. ":" .. _char.identifier
+		end
+		return result
+	end, ChatCommands._command_types.clientonly)
+	
+	ChatCommands:addCommand("reloadlang", CommandUtilities.modname, LocalizationManager:text("CommandUtilities_cmd_reloadlang_desc"), nil, function(args)
+		CommandUtilities:loadLocalization()
+		return LocalizationManager:text("CommandUtilities_cmd_reloadlang_done")
+	end, ChatCommands._command_types.clientonly)
 end

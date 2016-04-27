@@ -1,0 +1,45 @@
+{
+	"CommandUtilities_no_translation" : "Keine Übersetzung in der Sprachdatei.",
+	"CommandUtilities_missing" : "Ein Parameter/Var war nicht gegeben.",
+
+	"CommandUtilities_prefix_help" : "[Hilfe]",
+	"CommandUtilities_prefix_chat" : "[Chateinstellung]",
+	"CommandUtilities_prefix_error" : "[Fehler]",
+	"CommandUtilities_prefix_cmd" : "[Befehl]",
+	
+	"CommandUtilities_auto_replacement_on" : "Automatisches Ersetzen ist an.",
+	"CommandUtilities_auto_replacement_off" : "Automatisches Ersetzen ist aus.",
+	"CommandUtilities_job_suggestion_on" : "Auftragsvorschläge im Crime.Net sind an. (wie normal).",
+	"CommandUtilities_job_suggestion_off" : "Auftragsvorschläge im Crime.Net sind aus.",
+	
+	"CommandUtilities_cmd_no_perrmission" : "Du hast keine Berechtigung diesen Befehl zu nutzen.",
+	"CommandUtilities_cmd_not_exists" : "Dieser Befehl existiert nicht.",
+	"CommandUtilities_cmd_parameter_missing" : "Dieser Befehl braucht Parameter.",
+	
+	"CommandUtilities_depending_mod_not_found" : "Um den Befehl zu nutzen brauchst du {mod}.",
+	"CommandUtilities_not_in_heist" : "Du must direkt in einem Job sein.",
+	
+	"CommandUtilities_dialog_ok" : "Ok",
+	
+	"CommandUtilities_cmd_whoami_desc" : "Gibt die eigene peer_id zurück.",
+	
+	"CommandUtilities_cmd_whois_desc" : "Gibt den Steamnutzernamen zur gegebenen peer_id zurück.",	
+	
+	"CommandUtilities_cmd_help_desc" : "Gibt informationen zum gegebenen Befehl zurück.",
+	"CommandUtilities_cmd_help_usage" : "Verwendung: /help [Befehl]. Verfügbare Befehle können mit /commands, /mods und /modcommands [Modname] gefunden werden.",	
+	
+	"CommandUtilities_cmd_commands_desc" : "Gibt alle verfügbaren Befehle zurück.",	
+	
+	"CommandUtilities_cmd_mods_desc" : "Gibt die Mods mit Befehlen zurück.",	
+	
+	"CommandUtilities_cmd_modcommands_desc" : "Gibt alle verfügbaren Befehle für den gegebenen Mod zurück.",
+	"CommandUtilities_cmd_modcommands_no_cmds" : "Es gibt keinen Befehl für diesen Mod. Versuche /mods",
+	
+	"CommandUtilities_cmd_char_desc" : "Stellt die automatische Ersetzung von Buchstaben ein.",
+	
+	"CommandUtilities_cmd_charhelp_desc" : "Zeigt welche Buchstaben für Symbole verwendet werden können.",
+	
+	"CommandUtilities_cmd_reloadlang_desc" : "Läd die Sprachdateien neu. (kein Spielneustart)",
+	
+	"CommandUtilities_cmd_reloadlang_done" : "Sprachdateien neu geladen."
+}

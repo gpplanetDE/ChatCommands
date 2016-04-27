@@ -3,7 +3,7 @@
 	"description" : "Implents a command line API for the ingame chat.",
 	"author" : "SerMi",
 	"contact" : "sermi@gpplanet.de",
-	"version" : "0.6",
+	"version" : "0.9",
 	"priority" : 50,
 	"updates" : 
 	[
@@ -14,6 +14,7 @@
 	],
 	"hooks" : [
 		{"hook_id" : "lib/managers/chatmanager",   "script_path" : "lua/ChatCommands.lua"},
-		{ "hook_id" : "lib/managers/hud/hudchat", "script_path" : "lua/ChatCommands.lua" }
+		{"hook_id" : "lib/managers/hud/hudchat", "script_path" : "lua/ChatCommands.lua"},
+		{"hook_id" : "lib/managers/chatmanager",   "script_path" : "lua/ReplaceChars.lua"}
 	],
 }

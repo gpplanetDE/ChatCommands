@@ -1,0 +1,45 @@
+{
+	"CommandUtilities_no_translation" : "No translation set in the language file.",
+	"CommandUtilities_missing" : "A parameter/var was not given.",
+	
+	"CommandUtilities_prefix_help" : "[Help]",
+	"CommandUtilities_prefix_chat" : "[Chat-Settings]",
+	"CommandUtilities_prefix_error" : "[Error]",
+	"CommandUtilities_prefix_cmd" : "[Command]",
+	
+	"CommandUtilities_auto_replacement_on" : "Auto replacement is on.",
+	"CommandUtilities_auto_replacement_off" : "Auto replacement is off.",
+	"CommandUtilities_job_suggestion_on" : "Job suggestions in the Crime.Net are on now (as normal).",
+	"CommandUtilities_job_suggestion_off" : "Job suggestions in the Crime.Net are off now.",
+	
+	"CommandUtilities_cmd_no_perrmission" : "You don't have premission to use this command.",
+	"CommandUtilities_cmd_not_exists" : "The command doesn't exist.",
+	"CommandUtilities_cmd_parameter_missing" : "This command needs some parameters.",
+	
+	"CommandUtilities_depending_mod_not_found" : "To use this command you need {mod} to be installed. I am sorry.",
+	"CommandUtilities_not_in_heist" : "You need to be in a Heist.",
+	
+	"CommandUtilities_dialog_ok" : "Ok",
+	
+	"CommandUtilities_cmd_whoami_desc" : "Returns your own peer_id.",
+	
+	"CommandUtilities_cmd_whois_desc" : "Returns the steam username belonging to the given peer_id.",	
+	
+	"CommandUtilities_cmd_help_desc" : "Returns information about the given command.",
+	"CommandUtilities_cmd_help_usage" : "Usage: /help [command]. Find available commands with /commands, /mods and /modcommands [modname]",	
+	
+	"CommandUtilities_cmd_commands_desc" : "Returns all available commands.",	
+	
+	"CommandUtilities_cmd_mods_desc" : "Returns the commanded mods.",	
+	
+	"CommandUtilities_cmd_modcommands_desc" : "Returns the available commands for the given mod.",
+	"CommandUtilities_cmd_modcommands_no_cmds" : "There are no commands available for the given mod. Try /mods",
+	
+	"CommandUtilities_cmd_char_desc" : "Toggles the auto char replacement.",
+	
+	"CommandUtilities_cmd_charhelp_desc" : "Shows all available chars, that can be used for Symbols.",
+	
+	"CommandUtilities_cmd_reloadlang_desc" : "Reloads the language files. (no game restart)",
+	
+	"CommandUtilities_cmd_reloadlang_done" : "Language files reloaded."
+}
