@@ -101,7 +101,7 @@ if not ChatCommands then
 				if args_string ~= "" then
 					args_string = " " .. args_string
 				end
-				return "Usage: /" .. cmd._commandname .. args_string
+				return LocalizationManager:text("ChatCommands_usage") .. cmd._commandname .. args_string
 			end
 		end
 		return false
@@ -123,7 +123,7 @@ if not ChatCommands then
 		message = tostring(message)
 		if managers and managers.chat and managers.chat._receivers and managers.chat._receivers[1] then
 			for __, rcvr in pairs(managers.chat._receivers[1]) do
-				rcvr:receive_message(">>", message, Color(1, 255, 0, 0)) 
+				rcvr:receive_message(LocalizationManager:text("ChatCommands_respond_prefix"), message, Color(1, 255, 0, 0)) 
 			end  
 		end
 	end
