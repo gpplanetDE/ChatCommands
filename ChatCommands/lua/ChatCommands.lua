@@ -68,7 +68,7 @@ if not ChatCommands then
 		end
 	end
 	
-	function ChatCommands:_parseMessage(message, allowed_command_type, peer)
+	function ChatCommands:_parseMessage(message, allowed_command_type, peer) //Regex-Match:       (?:"([^"]+)"|([^ ]+))
 		local command, command_args
 		if utf8.sub(message, 1, 1) == "/" then
 			local command_string = utf8.sub(message, 2, utf8.len(message))
